@@ -10,6 +10,8 @@ pip install adona-market-data              # candles by REST
 pip install "adona-market-data[pandas]"    # + to_pandas()
 pip install "adona-market-data[stream]"    # + the live stream
 pip install "adona-market-data[all]"
+pip install "adona-market-data[backtrader]"   # + a backtrader data feed
+pip install "adona-market-data[vectorbt]"     # + a vectorbt Data class
 ```
 
 No data ships with this package. Everything is read from the API with your key, and
@@ -58,6 +60,31 @@ off, a connection limit.
 
 Each (re)subscribe sends the candle channels' recent bars again (`snapshot=True`), and
 those bars are billed like a REST page.
+
+## Backtesting
+
+The data is read once, when the feed is built.
+
+```python
+import backtrader as bt
+from adona_market_data import Client
+from adona_market_data.backtrader import feed
+
+cerebro = bt.Cerebro()
+cerebro.adddata(feed(Client(), "EURUSD", "M5", bars=5000), name="EURUSD")
+```
+
+```python
+import vectorbt as vbt
+from adona_market_data import Client
+from adona_market_data.vectorbt import AdonaData
+
+data = AdonaData.download(["EURUSD", "GBPUSD"], client=Client(), timeframe="M15", bars=3000)
+close = data.get("Close")
+```
+
+The vectorbt class needs Python 3.11 or later. The volume in both is the tick volume. The archive is recent (see the depth below), so
+these are for strategies tested on recent months.
 
 ## Refusals
 

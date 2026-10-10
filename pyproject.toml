@@ -11,7 +11,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [{ name = "Adona Robot Sàrl", email = "support@adona-robot.com" }]
-keywords = ["forex", "fx", "gold", "xauusd", "market data", "ohlc", "candles", "websocket", "api", "pandas"]
+keywords = ["forex", "fx", "gold", "xauusd", "market data", "ohlc", "candles", "websocket", "api", "pandas", "backtrader", "vectorbt", "backtesting"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
@@ -27,6 +27,10 @@ dependencies = ["requests>=2.28"]
 [project.optional-dependencies]
 pandas = ["pandas>=1.5"]
 stream = ["websockets>=13"]
+backtrader = ["pandas>=1.5", "backtrader>=1.9.78"]
+# vectorbt 1.1 needs Python 3.11; its 1.0 breaks with current plotly. On 3.10 the
+# extra installs pandas only, and ohlcv() still works.
+vectorbt = ["pandas>=1.5", "vectorbt>=1.1; python_version >= '3.11'"]
 all = ["pandas>=1.5", "websockets>=13"]
 
 [project.urls]
@@ -38,7 +42,7 @@ Source = "https://github.com/Adona-Robot/market-data-python"
 Issues = "https://github.com/Adona-Robot/market-data-python/issues"
 
 [dependency-groups]
-dev = ["pytest>=8", "pytest-asyncio>=0.23", "responses>=0.25", "pandas>=1.5", "websockets>=13"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "responses>=0.25", "pandas>=1.5", "websockets>=13", "backtrader>=1.9.78", "vectorbt>=1.1; python_version >= '3.11'"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/adona_market_data"]
