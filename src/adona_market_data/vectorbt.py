@@ -14,7 +14,7 @@ recent (one-minute bars since May 2025 for EURUSD, GBPUSD, USDJPY and XAUUSD, sp
 2026 for the others), so this is for strategies tested on recent months.
 
 ``ohlcv()`` gives the same frame without vectorbt. ``AdonaData`` needs
-``pip install "adona-market-data[vectorbt]"``.
+``pip install "adona-market-data[vectorbt]"`` on Python 3.11 or later.
 """
 
 from __future__ import annotations
@@ -34,7 +34,8 @@ def ohlcv(client: Client, symbol: str, timeframe: str = "M1", bars: int = 1000, 
 
 try:
     import vectorbt as _vbt
-except ImportError:  # pragma: no cover - the class exists only with vectorbt installed
+except Exception:  # pragma: no cover - absent, or an install that fails on import
+    # ohlcv() must keep working without a usable vectorbt; only the class needs it.
     _vbt = None
 
 if _vbt is not None:

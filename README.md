@@ -83,7 +83,7 @@ data = AdonaData.download(["EURUSD", "GBPUSD"], client=Client(), timeframe="M15"
 close = data.get("Close")
 ```
 
-The volume in both is the tick volume. The archive is recent (see the depth below), so
+The vectorbt class needs Python 3.11 or later. The volume in both is the tick volume. The archive is recent (see the depth below), so
 these are for strategies tested on recent months.
 
 ## Refusals
