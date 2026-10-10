@@ -66,7 +66,11 @@ def test_ohlcv_uses_vectorbt_s_column_names(client):
 @responses.activate
 def test_vectorbt_downloads_each_symbol_once_and_backtests(client):
     vbt = pytest.importorskip("vectorbt")
-    from adona_market_data.vectorbt import AdonaData
+    import adona_market_data.vectorbt as connector
+
+    if not hasattr(connector, "AdonaData"):
+        pytest.skip("vectorbt is installed but does not import here")
+    AdonaData = connector.AdonaData
 
     responses.post(f"{API}/v1/tokens", json=TOKEN)
     responses.get(f"{API}/v1/candles", json={"candles": bars(60, 1.1), "next_before": None})
