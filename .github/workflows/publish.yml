@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv venv && uv pip install -e . pytest pytest-asyncio responses pandas "websockets>=13" && .venv/bin/python -m pytest -q
+      - run: uv venv && uv pip install -e ".[all,backtrader,vectorbt]" pytest pytest-asyncio responses && .venv/bin/python -m pytest -q
       - run: uv build
       - uses: actions/upload-artifact@v4
         with:
