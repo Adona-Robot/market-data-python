@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.1.0 - unreleased
+## 0.2.0 - unreleased
+
+Connectors for backtesting.
+
+- `adona_market_data.backtrader.feed()`: the candles as a backtrader `PandasData`, on the
+  API's timeframes, with UTC times. `adona_market_data.vectorbt.AdonaData`: a `vbt.Data`
+  reading each symbol once, with vectorbt's column names, and `ohlcv()` for the same
+  frame without vectorbt. Extras `[backtrader]` and `[vectorbt]`.
+
+## 0.1.0 - 2026-10-10
 
 First version.
 
