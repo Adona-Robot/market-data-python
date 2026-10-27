@@ -86,6 +86,10 @@ close = data.get("Close")
 The vectorbt class needs Python 3.11 or later. The volume in both is the tick volume. The archive is recent (see the depth below), so
 these are for strategies tested on recent months.
 
+The connectors read through the API with your key, page by page, billed like any other
+page and within your plan's quota. Nothing is downloaded in bulk, and the
+[terms of service](https://adona-robot.com/en/terms) apply.
+
 ## Refusals
 
 Every refusal is a `Refused` with the API's code, for example `CUSTOMER_MINUTE_CEILING`
@@ -116,7 +120,7 @@ call is pointless. Every code is listed, with what to do, in the
 ## Development
 
 ```bash
-uv venv && uv pip install -e . pytest pytest-asyncio responses pandas "websockets>=13"
+uv venv && uv pip install -e ".[all,backtrader,vectorbt]" pytest pytest-asyncio responses
 .venv/bin/python -m pytest
 ```
 

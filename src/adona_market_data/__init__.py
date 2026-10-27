@@ -8,7 +8,7 @@ from ._client import API, PAGE_MAX, TIMEFRAMES, Client
 from ._errors import AdonaError, Refused, StreamStopped
 from ._models import Bar, Candle, Quote, candles_to_pandas
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "API",

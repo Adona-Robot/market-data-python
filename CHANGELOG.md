@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.1.0 - unreleased
+## 0.2.0 - unreleased
+
+Connectors for backtesting.
+
+- `adona_market_data.backtrader.feed()`: the candles as a backtrader `PandasData`, on the
+  API's timeframes, with UTC times. `adona_market_data.vectorbt.AdonaData`: a `vbt.Data`
+  reading each symbol once, with vectorbt's column names, and `ohlcv()` for the same
+  frame without vectorbt. Extras `[backtrader]` and `[vectorbt]`.
+
+## 0.1.0 - 2026-10-10
 
 First version.
 
@@ -13,9 +22,5 @@ First version.
 - `stream()`: quotes and bars on the live WebSocket, with the ticket offered as a
   subprotocol, a backoff on reconnect, and a stop on the closes that reconnecting
   cannot change.
-- `adona_market_data.backtrader.feed()`: the candles as a backtrader `PandasData`, on the
-  API's timeframes, with UTC times. `adona_market_data.vectorbt.AdonaData`: a `vbt.Data`
-  reading each symbol once, with vectorbt's column names, and `ohlcv()` for the same
-  frame without vectorbt. Extras `[backtrader]` and `[vectorbt]`.
 - `Refused` carries the API's code. Only what waiting can clear is retried, honouring
   `Retry-After`.
