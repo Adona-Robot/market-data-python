@@ -9,8 +9,9 @@
 
 The feed is read once, when it is built: backtrader replays it from memory, so a
 backtest run twice reads the API once. The archive is recent (one-minute bars since
-May 2025 for EURUSD, GBPUSD, USDJPY and XAUUSD, spring 2026 for the others; one
-second kept 180 days), so this is for strategies tested on recent months.
+May 2025 for EURUSD, GBPUSD, USDJPY and XAUUSD, spring 2026 for the others; one-second
+bars over a rolling 180 days, since 6 September 2026), so this is for strategies tested
+on recent months.
 
 Needs ``pip install "adona-market-data[backtrader]"``.
 """
@@ -34,7 +35,12 @@ TIMEFRAMES = {
 
 
 def feed(client: Client, symbol: str, timeframe: str, bars: int = 5000, since: datetime | None = None, **kwargs):
-    """A ``bt.feeds.PandasData`` of the latest ``bars`` candles (or back to ``since``).
+    """A ``bt.feeds.PandasData`` of the latest ``bars`` candles.
+
+    With ``since``, the candles back to that instant, but never more than ``bars``: the
+    latest ``bars`` of them if there are more. Raise ``bars`` for a long ``since``
+    (three months of M1 is about 90,000 bars). No candle at all (a ``since`` in the
+    future, S1 before its archive began) raises ``ValueError``.
 
     Times are UTC, as naive datetimes, which is what backtrader expects. The volume is
     the tick volume (price updates in the bar), and there is no open interest. Extra
@@ -46,7 +52,10 @@ def feed(client: Client, symbol: str, timeframe: str, bars: int = 5000, since: d
         raise ImportError('this needs backtrader: pip install "adona-market-data[backtrader]"') from error
     if timeframe not in TIMEFRAMES:
         raise ValueError(f"timeframe must be one of {', '.join(TIMEFRAMES)}")
-    frame = client.to_pandas(client.candles(symbol, timeframe, bars=bars, since=since))
+    candles = client.candles(symbol, timeframe, bars=bars, since=since)
+    if not candles:
+        raise ValueError(f"no {symbol} {timeframe} candle to feed" + (f" since {since.isoformat()}" if since else ""))
+    frame = client.to_pandas(candles)
     frame.index = frame.index.tz_convert("UTC").tz_localize(None)
     name, compression = TIMEFRAMES[timeframe]
     return bt.feeds.PandasData(
