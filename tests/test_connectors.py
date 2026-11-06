@@ -82,3 +82,14 @@ def test_vectorbt_downloads_each_symbol_once_and_backtests(client):
     fast, slow = close.rolling(3).mean(), close.rolling(9).mean()
     portfolio = vbt.Portfolio.from_signals(close, fast > slow, fast < slow)
     assert len(portfolio.total_return()) == 2
+
+
+@responses.activate
+def test_a_backtrader_feed_with_no_candle_says_so(client):
+    pytest.importorskip("backtrader")
+    from adona_market_data.backtrader import feed
+
+    responses.post(f"{API}/v1/tokens", json=TOKEN)
+    responses.get(f"{API}/v1/candles", json={"candles": [], "next_before": None})
+    with pytest.raises(ValueError, match="no EURUSD M1 candle"):
+        feed(client, "EURUSD", "M1", bars=100)

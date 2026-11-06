@@ -27,7 +27,9 @@ COLUMNS = {"open": "Open", "high": "High", "low": "Low", "close": "Close", "volu
 
 
 def ohlcv(client: Client, symbol: str, timeframe: str = "M1", bars: int = 1000, since: datetime | None = None):
-    """One symbol's candles with vectorbt's column names, indexed by time in UTC."""
+    """One symbol's latest ``bars`` candles with vectorbt's column names, indexed by time
+    in UTC. With ``since``, the candles back to that instant, but never more than
+    ``bars``: raise ``bars`` for a long ``since``."""
     frame = client.to_pandas(client.candles(symbol, timeframe, bars=bars, since=since))
     return frame.rename(columns=COLUMNS)
 
@@ -42,8 +44,9 @@ if _vbt is not None:
 
     class AdonaData(_vbt.Data):
         """``vbt.Data`` reading from the adona-robot API: pass ``client=`` (a
-        :class:`~adona_market_data.Client`), ``timeframe=``, and ``bars=`` or ``since=``
-        to :meth:`download`, which vectorbt hands to each symbol's read."""
+        :class:`~adona_market_data.Client`), ``timeframe=``, ``bars=`` and ``since=``
+        to :meth:`download`, which vectorbt hands to each symbol's read. ``since`` is
+        capped by ``bars``, as in :func:`ohlcv`."""
 
         @classmethod
         def download_symbol(
