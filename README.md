@@ -28,7 +28,8 @@ frame = client.to_pandas(bars)  # a DataFrame indexed by time (UTC): open, high,
 ```
 
 - Timeframes are `S1`, `M1`, `M5`, `M15`, `H1`, `H4` and `D1`.
-- `client.candles(..., since=datetime(...))` reads back to an instant.
+- `client.candles(..., since=datetime(...))` reads back to an instant, up to `bars` candles
+  (1 000 by default): three months of M1 is about 90 000 bars, so pass `bars=` to match.
 - `client.iter_pages(...)` yields the pages one by one, newest first, if you want to stop early.
 
 Prices arrive as strings and become `Decimal`, so no digit is rounded. `to_pandas()`
