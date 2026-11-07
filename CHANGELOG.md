@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 - 2026-11-07
+## 0.2.0 - 2026-11-06
 
 Connectors for backtesting.
 
